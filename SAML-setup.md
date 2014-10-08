@@ -1,6 +1,7 @@
 # SAML Security Setup
 
-SAML-based security is implemented via the Spring Security SAML Extension to connect your application (the "Service Provider" or SP) to the Single Sign On system (OpenAM - the Identity Provider).
+SAML-based security is implemented via the Spring Security SAML Extension to connect your application (the "Service Provider" or SP) to the Single Sign On system (OpenAM - the Identity Provider or IdP).
+This document explains how to integrate SAML into your web application. Required components are a SAML IdP such as OpenAM, and the SharedSecurity JAR.
 
 ## How-To Documentation 
 (This is a highly recommended read and will explain the process in detail)
