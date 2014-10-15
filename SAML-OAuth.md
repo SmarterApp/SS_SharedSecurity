@@ -12,14 +12,66 @@ Simple *Authentication*: Most of the web applications are protected by OpenAM. P
 * The SAML response contains a customized section with information about the user's SBAC Tenancy Chain, including the user's assigned roles.
 
 ### 2. SAML Bearer Assertion
-Refer to [OAuth2 SAML Bearer](http://openam.forgerock.org/openam-documentation/openam-doc-source/doc/webhelp/admin-guide/oauth2-saml2-bearer.html).Used for *Application Access*: This is a high level permission check that matches up the user's roles (returned in the SAML response as part of the OpenAM authentication), with the permissions for the current application (obtained by querying the Permissions application). This step ensures that the user has at least one role that has permission to this app. Additionally, the users’ tenancy is calculated based on whether the entity (state, institution, etc.) associated with the user's role(s) is subscribed to this app and is in "good standing". All of this is configured in the Program Management application. This is how the tenant dropdown is populated and the application is skinned.
+Refer to [OAuth2 SAML Bearer](http://openam.forgerock.org/openam-documentation/openam-doc-source/doc/webhelp/admin-guide/oauth2-saml2-bearer.html).Used for *Application Access*: This is a high level permission check that matches up the user's roles (returned in the SAML response as part of the OpenAM authentication), with the permissions for the current application (obtained by querying the Permissions application). This step ensures that the user has at least one role that has permission to this app. Additionally, the users’ tenancy is calculated based on whether the entity (state, institution, etc.) associated with the user's role(s) is subscribed to this app and is in "good standing".
+All of this is configured in the Program Management application. This is how the tenant dropdown is populated and the application is skinned.
 
-This is the case of a logged in user requiring a 'coordinated web service' which is a form of machine-to-machine (M2M) authentication, but on behalf of the logged in user. This essentially converts a user initiated SAML authentication into an OAuth token.
+This is the case of a logged in user requiring a 'coordinated web service' which is a form of machine-to-machine (M2M) authentication, but on behalf of the logged in user.
+This essentially converts a user initiated SAML authentication into an OAuth token. Tokens have a predefined "lifetime" and need to be renewed after expiration.
 
 #### Example
-ComponentX needs to make a REST call to componentY on behalf of a logged in user. In this case, the component needs to get an OAuth token utilizing a SAML bearer mechanism. This is facilitated using a two-step OAuth token exchange.
+ComponentX needs to make a REST call to componentY on behalf of a logged in user. In this case, the component needs to get an OAuth token utilizing a SAML bearer mechanism.
+This is facilitated using a two-step OAuth token exchange.
+ 
+**Step 1. Get a token from OpenAM**
+
+POST to https://your.openam.url/auth/oauth2/access_token?realm=/your-realm 
+with `Content-Type = application/x-www-form-urlenocded` 
+and the following parameters:
+```
+grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer
+client_id=<oauth client id as defined in OpenAM>
+client_secret=<oauth clients password>
+```
+Spring Security adds an encoded assertion parameter that essentially "proves" the user is logged in. 
+OpenAM crosswalks this to the logged in user, and will return a JSON response similar to this:
+```
+{
+    "sbacUUID": "53fb8da1e4b0cedc8f172b45",
+    "mail": “<user’s email address>",
+    "sn": “<last name>",
+    "scope": [
+        "sbacUUID",
+        "mail",
+        "sn",
+        "cn",
+        "sbacTenancyChain",
+        "givenName"
+    ],
+    "grant_type": "urn:ietf:params:oauth:grant-type:saml2-bearer",
+    "cn": “<full name of user>,
+    "realm": "/sbac",
+    "sbacTenancyChain": “<SBAC tenancy chain>",
+    "token_type": "Bearer",
+    "expires_in": 1605,
+    "givenName": "<given name of user>",
+    "access_token": "8744be5d-0e39-4995-b20e-05b45af3e0d8"
+}
+```
+
+**Step 2. Call the Service Provider using your access_token**
+
+Call the service provider endpoint with the token. To include the access_token you need to put it in the header of the call by using this format, for example:
+`Authorization: Bearer 8744be5d-0e39-4995-b20e-05b45af3e0d8` 
+
+### 3. OAuth client credentials grant
+Refer to [Oauth2 Client Credentials](http://openam.forgerock.org/openam-documentation/openam-doc-source/doc/webhelp/admin-guide/oauth2-client-cred.html). This is a purely M2M (no user involved). Batch operations, bootstrap communications, etc. require this type of authentication. Since it's not performed on behalf of a user, it simply uses a pre-established clientId and client secret.
+
+If the request from componentX to componentY has no logged in user, there is a different mechanism to get an OAuth token. 
+This requires having a user provisioned in ART that is specifically used to grant access (via the appropriate role) to allow the client to talk to the service provider. 
+In this case a similar process is followed to the SAML bearer assertion above, with `password` grant type of this specially provisioned user.
 
 **Step 1. Get a token from OpenAM**
+
 POST to https://your.openam.url/auth/oauth2/access_token?realm=/your-realm 
 with `Content-Type = application/x-www-form-urlenocded` 
 and the following params:
@@ -35,7 +87,7 @@ That will return a JSON response similar to this:
 {
     "sbacUUID": "53fb8da1e4b0cedc8f172b45",
     "mail": “<user’s email address>",
-    "sn": “<role name>",
+    "sn": “<last name>",
     "scope": [
         "sbacUUID",
         "mail",
@@ -45,21 +97,18 @@ That will return a JSON response similar to this:
         "givenName"
     ],
     "grant_type": "password",
-    "cn": “<common name of user>,
+    "cn": “<full name of user>,
     "realm": "/sbac",
-    "sbacTenancyChain": “<tenancy chain>",
+    "sbacTenancyChain": “<SBAC tenancy chain>",
     "token_type": "Bearer",
     "expires_in": 1605,
-    "givenName": "wi",
+    "givenName": "<given name of user>",
     "access_token": "8744be5d-0e39-4995-b20e-05b45af3e0d8"
 }
 ```
 
 **Step 2. Call the Service Provider using your access_token**
+
 Call the service provider endpoint with the token. To include the access_token you need to put it in the header of the call by using this format, for example:
 `Authorization: Bearer 8744be5d-0e39-4995-b20e-05b45af3e0d8` 
 
-### 3. OAuth client credentials grant
-Refer to [Oauth2 Client Credentials](http://openam.forgerock.org/openam-documentation/openam-doc-source/doc/webhelp/admin-guide/oauth2-client-cred.html). This is a purely M2M (no user involved). Batch operations, bootstrap communications, etc. require this type of authentication. Since it's not performed on behalf of a user, it simply uses a pre-established clientId and client secret.
-
-If the request from componentX to componentY has no logged in user, there is a different mechanism to get an OAuth token. This requires having a user provisioned in ART that is specifically used to grant access (via the appropriate role) to allow the client to talk to the service provider. In this case a similar process is followed to the SAML bearer assertion above, with `password` grant type of this specially provisioned user.
