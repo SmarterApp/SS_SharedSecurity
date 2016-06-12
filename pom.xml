@@ -17,9 +17,9 @@
     </properties>
 
 	<scm>
-        <connection>scm:hg:https://bitbucket.org/sbacoss/sharedsecurity_release</connection>
-        <developerConnection>scm:hg:https://bitbucket.org/sbacoss/sharedsecurity_release</developerConnection>
-        <url>https://bitbucket.org/sbacoss/sharedsecurity_release</url>
+        <connection>scm:git:https://github.com/SmarterApp/SharedSecurity</connection>
+        <developerConnection>scm:git:https://github.com/SmarterApp/SharedSecurity</developerConnection>
+        <url>https://github.com/SmarterApp/SharedSecurity</url>
     </scm>
 
     <prerequisites>
