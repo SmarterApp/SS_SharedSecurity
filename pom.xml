@@ -14,7 +14,7 @@
     
     <properties>
         <bouncycastle.version>1.50</bouncycastle.version>
-		<progman-client.version>0.0.4-SNAPSHOT</progman-client.version>
+		<progman-client.version>3.0.0</progman-client.version>
     </properties>
 
 	<scm>
