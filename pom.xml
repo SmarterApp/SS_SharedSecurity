@@ -3,7 +3,7 @@
 
 	<name>Smarter Balanced Shared Code</name>
 	<artifactId>sb11-shared-security</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>3.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -17,17 +17,10 @@
 		<progman-client.version>3.0.0</progman-client.version>
     </properties>
 
-	<scm>
-        <connection>scm:git:https://github.com/SmarterApp/SharedSecurity</connection>
-        <developerConnection>scm:git:https://github.com/SmarterApp/SharedSecurity</developerConnection>
-        <url>https://github.com/SmarterApp/SharedSecurity</url>
-    </scm>
-
     <prerequisites>
         <maven>3.0.0</maven>
     </prerequisites>
 
-        
 	<dependencies>
 
 		<!-- Logging -->
@@ -97,18 +90,6 @@
 
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>commons-logging</groupId>
-					<artifactId>commons-logging</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 			<exclusions>
@@ -155,12 +136,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context-support</artifactId>
-            <version>${spring-security.version}</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -343,8 +330,53 @@
              <artifactId>spring-security-taglibs</artifactId>
              <version>${spring-security.version}</version>
          </dependency>
-    
-      
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<scm>
+		<connection>scm:git:https://github.com/SmarterApp/SS_SharedSecurity.git</connection>
+		<developerConnection>scm:git:git://github.com/SmarterApp/SS_SharedSecurity.git</developerConnection>
+		<url>https://github.com/SmarterApp/SS_SharedSecurity</url>
+		<tag>HEAD</tag>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>central</id>
+			<name>airdev-releases</name>
+			<url>https://airdev.jfrog.io/airdev/libs-releases-local</url>
+		</repository>
+	</distributionManagement>
 	
 </project>
