@@ -3,7 +3,7 @@
 
 	<name>Smarter Balanced Shared Code</name>
 	<artifactId>sb11-shared-security</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>3.1.0.RELEASE</version>
 	<packaging>jar</packaging>
 
 	<parent>
@@ -368,7 +368,7 @@
 		<connection>scm:git:https://github.com/SmarterApp/SS_SharedSecurity.git</connection>
 		<developerConnection>scm:git:git://github.com/SmarterApp/SS_SharedSecurity.git</developerConnection>
 		<url>https://github.com/SmarterApp/SS_SharedSecurity</url>
-		<tag>HEAD</tag>
+		<tag>3.1.0.RELEASE</tag>
 	</scm>
 
 	<distributionManagement>
