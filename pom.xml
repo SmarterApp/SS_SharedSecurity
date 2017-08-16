@@ -3,18 +3,18 @@
 
 	<name>Smarter Balanced Shared Code</name>
 	<artifactId>sb11-shared-security</artifactId>
-	<version>3.1.1.RELEASE</version>
+	<version>4.0.0</version>
 	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>org.opentestsystem.shared</groupId>
 		<artifactId>shared-build-parent</artifactId>
-		<version>3.1.0.RELEASE</version>
+		<version>4.0.0.RELEASE</version>
 	</parent>
     
     <properties>
         <bouncycastle.version>1.50</bouncycastle.version>
-	<progman-client.version>3.1.0.RELEASE</progman-client.version>
+	<progman-client.version>4.0.0.RELEASE</progman-client.version>
     </properties>
 
     <prerequisites>
@@ -368,7 +368,7 @@
 		<connection>scm:git:https://github.com/SmarterApp/SS_SharedSecurity.git</connection>
 		<developerConnection>scm:git:git://github.com/SmarterApp/SS_SharedSecurity.git</developerConnection>
 		<url>https://github.com/SmarterApp/SS_SharedSecurity</url>
-		<tag>3.1.1.RELEASE</tag>
+		<tag>4.0.0</tag>
 	</scm>
 
 	<distributionManagement>
