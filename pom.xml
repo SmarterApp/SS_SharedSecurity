@@ -9,12 +9,12 @@
     <parent>
         <groupId>org.opentestsystem.shared</groupId>
         <artifactId>shared-build-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.0.7</version>
     </parent>
 
     <properties>
         <bouncycastle.version>1.50</bouncycastle.version>
-        <progman-client.version>4.0.3</progman-client.version>
+        <progman-client.version>4.0.4</progman-client.version>
     </properties>
 
     <prerequisites>
