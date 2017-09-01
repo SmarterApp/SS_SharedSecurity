@@ -3,16 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:p="http://www.springframework.org/schema/p"
     xmlns:cache="http://www.springframework.org/schema/cache"
-	xmlns:security="http://www.springframework.org/schema/security"
     xsi:schemaLocation="
                 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-                http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd
-				 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+                http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
 	<!-- Enables the caching through annotations -->
 	<cache:annotation-driven />
-	<!--<security:http><security:csrf disabled="true"></security:csrf> </security:http>-->
-
 	<bean id="securityCacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cache-manager-ref="securityEhcache" />
 	<bean id="securityEhcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:config-location="classpath:security-ehcache.xml" p:shared="true" />
 </beans>
